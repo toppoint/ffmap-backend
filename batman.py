@@ -6,13 +6,14 @@ import re
 class batman:
   """ Bindings for B.A.T.M.A.N. advanced batctl tool
   """
-  def __init__(self, mesh_interface = "bat0"):
+  def __init__(self, mesh_interface = "bat0", batctl = "/usr/sbin/batctl"):
     self.mesh_interface = mesh_interface
+    self.batctl = batctl
 
   def vis_data(self):
     """ Parse "batctl -m <mesh_interface> vd json -n" into an array of dictionaries.
     """
-    output = subprocess.check_output(["batctl","-m",self.mesh_interface,"vd","json","-n"])
+    output = subprocess.check_output([self.batctl,"-m",self.mesh_interface,"vd","json","-n"])
     lines = output.splitlines()
     vd = []
     for line in lines:
@@ -26,7 +27,7 @@ class batman:
   def gateway_list(self):
     """ Parse "batctl -m <mesh_interface> gwl -n" into an array of dictionaries.
     """
-    output = subprocess.check_output(["batctl","-m",self.mesh_interface,"gwl","-n"])
+    output = subprocess.check_output([self.batctl,"-m",self.mesh_interface,"gwl","-n"])
     output_utf8 = output.decode("utf-8")
     # TODO Parse information
     lines = output_utf8.splitlines()
@@ -47,7 +48,7 @@ class batman:
   def gateway_mode(self):
     """ Parse "batctl -m <mesh_interface> gw"
     """
-    output = subprocess.check_output(["batctl","-m",self.mesh_interface,"gw"])
+    output = subprocess.check_output([self.batctl,"-m",self.mesh_interface,"gw"])
     elements = output.decode("utf-8").split()
     mode = elements[0]
     if mode == "server":
