@@ -27,6 +27,9 @@ parser.add_argument('-a', '--aliases',
 parser.add_argument('-m', '--mesh', action='append',
                   help='batman mesh interface')
 
+parser.add_argument('-d', '--destination-directory', action='store',
+                  help='destination directory for generated files',required=True)
+
 args = parser.parse_args()
 
 options = vars(args)
@@ -50,4 +53,6 @@ if options['aliases']:
 
 m = D3MapBuilder(db)
 
-print(m.build())
+nodes_json = open(options['destination_directory'] + '/nodes.json.new','w')
+nodes_json.write(m.build())
+nodes_json.close()
